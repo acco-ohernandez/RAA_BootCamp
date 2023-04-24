@@ -39,7 +39,7 @@ namespace RAA_BootCamp
                 for (int i = 0; i < _number; i++)
                     {
                     Level _newLevel = Level.Create(doc, _elevation); // create a levels
-                    string _levelName = GetTheFizzBuzzName(i);       // Get the FizzBuzzName
+                    string _levelName = GetTheFizzBuzzName(doc, i, _newLevel);       // Get the FizzBuzzName
                     _newLevel.Name = _levelName;                     // Rename the level
                     _elevation = _elevation + _floorHeight;          // Increment the elevation
                 }
@@ -48,18 +48,38 @@ namespace RAA_BootCamp
             return Result.Succeeded;
         }
 
-        private string GetTheFizzBuzzName(double _floorHeight)
+        private string GetTheFizzBuzzName(Autodesk.Revit.DB.Document doc, double _floorHeight, Level level)
         {
             string FizzBuzzName;
             if (_floorHeight % 3 == 0 && _floorHeight % 5 == 0)
+            {
                 FizzBuzzName = $"BUZZBUZZ_{_floorHeight}";
+                CreateViewSheet(doc, FizzBuzzName);
+            }
             else if (_floorHeight % 3 == 0)
+            {
                 FizzBuzzName = $"FIZZ_{_floorHeight}";
+                // CreateCeilingPlan();                    // NOT DONE, NEED TO IMPLEMENT
+            }
             else if (_floorHeight % 5 == 0)
+            {
                 FizzBuzzName = $"BUZZ{_floorHeight}";
+               // CreateFloorPlan(doc, FizzBuzzName);  // NOT DONE, NEED TO IMPLEMENT
+            }
             else
                 FizzBuzzName = $"{_floorHeight} % (3 or 5) != 0";
             return FizzBuzzName;
+        }
+
+        private void CreateViewSheet(Autodesk.Revit.DB.Document doc, string fizzBuzzName)
+        {
+            // Get an available title block from document
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            collector.OfClass(typeof(FamilySymbol));
+            collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
+
+            ViewSheet _newViewSheet = ViewSheet.Create(doc, collector.FirstElement().Id);
+            _newViewSheet.Name = fizzBuzzName;
         }
     }
 }
