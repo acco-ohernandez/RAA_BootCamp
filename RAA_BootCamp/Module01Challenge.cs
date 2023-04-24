@@ -16,6 +16,7 @@ namespace RAA_BootCamp
     [Transaction(TransactionMode.Manual)]
     public class Module01Challenge : IExternalCommand
     {
+        int sheetCount = 0;
         public Result Execute(
           ExternalCommandData commandData,
           ref string message,
@@ -30,7 +31,7 @@ namespace RAA_BootCamp
             int _number = 250;
             double _elevation = 0;
             double _floorHeight = 15;
-
+            int levelsCount = 0;
             using (Transaction tx = new Transaction(doc))
             {
                 tx.Start("FizzBuzz Levels");
@@ -39,12 +40,14 @@ namespace RAA_BootCamp
                 for (int i = 0; i < _number; i++)
                     {
                     Level _newLevel = Level.Create(doc, _elevation); // create a levels
+                    levelsCount++
                     string _levelName = GetTheFizzBuzzName(doc, i, _newLevel);       // Get the FizzBuzzName
                     _newLevel.Name = _levelName;                     // Rename the level
                     _elevation = _elevation + _floorHeight;          // Increment the elevation
                 }
                 tx.Commit();
             }
+            TaskDialog.Show("INFO",$"{levelsCount} Levels created/n{sheetCount} Sheets Created/nI'm still working on the project.");
             return Result.Succeeded;
         }
 
@@ -80,6 +83,7 @@ namespace RAA_BootCamp
 
             ViewSheet _newViewSheet = ViewSheet.Create(doc, collector.FirstElement().Id);
             _newViewSheet.Name = fizzBuzzName;
+            sheetCount++;
         }
     }
 }
