@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Module 01 Challenge</Text>
+    <Description>Some description for RAA_BootCamp</Description>
+    <Assembly>RAA_BootCamp.dll</Assembly>
+    <FullClassName>RAA_BootCamp.Module01Challenge</FullClassName>
+    <ClientId>cd7f290a-9508-4e71-810b-77a5b27331fb</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application RAA_BootCamp</Name>
+    <Assembly>RAA_BootCamp.dll</Assembly>
+    <FullClassName>RAA_BootCamp.App</FullClassName>
+    <ClientId>77bfc50f-5194-41cf-ae0f-3647952d9a13</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
