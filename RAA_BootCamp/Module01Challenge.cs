@@ -91,7 +91,6 @@ namespace RAA_BootCamp
             FizzBuzzViewPortCounter++;
             return _newViewPort;
         }
-
         private ViewPlan CreateFizzBuzzFloorViewPlan(Autodesk.Revit.DB.Document doc, string fizzBuzzName, ElementId levelId)
         {
             // Get view family types
@@ -111,7 +110,6 @@ namespace RAA_BootCamp
             //floorPlanCount++;
             return newFloorPlan;
         }
-
         private void ResetGlobalVariables()
         {
             levelsCount = 0;
