@@ -76,9 +76,9 @@ namespace RAA_BootCamp
             }
 
             TaskDialog.Show("INFO",$"{levelsCount} Levels created\n" +
-                                   $"{sheetCount} Sheets Created\n" +
-                                   $"{floorPlanCount} Floor Plan(s) Created\n" +
-                                   $"{ceilingPlanCount} Ceiling Plan(s) Created\n" +
+                                   $"{sheetCount} FIZZBUZZ Sheets Created\n" +
+                                   $"{floorPlanCount} FIZZ Floor Plan(s) Created\n" +
+                                   $"{ceilingPlanCount} BUZZ Ceiling Plan(s) Created\n" +
                                    $"{FizzBuzzViewPortCounter} ViewPort(s) Created");
 
             return Result.Succeeded;
