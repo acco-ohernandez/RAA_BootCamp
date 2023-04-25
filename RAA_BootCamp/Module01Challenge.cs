@@ -16,7 +16,14 @@ namespace RAA_BootCamp
     [Transaction(TransactionMode.Manual)]
     public class Module01Challenge : IExternalCommand
     {
-        int sheetCount = 0;
+        // Global Variables
+        int levelsCount;
+        int sheetCount;
+        string globalFizzBuzzName;
+        int floorPlanCount;
+        int ceilingPlanCount;
+        int FizzBuzzViewPortCounter;
+
         public Result Execute(
           ExternalCommandData commandData,
           ref string message,
@@ -31,59 +38,175 @@ namespace RAA_BootCamp
             int _number = 250;
             double _elevation = 0;
             double _floorHeight = 15;
-            int levelsCount = 0;
+
+            //Reset global variables
+            ResetGlobalVariables();
+
             using (Transaction tx = new Transaction(doc))
             {
-                tx.Start("FizzBuzz Levels");
+                tx.Start("FizzBuzz creation");
 
-                //for (int i = 1; i < _number; i++)
                 for (int i = 0; i < _number; i++)
+                {
+                    string _FizzBuzzName = GetTheFizzBuzzName(i);                  // Get the FizzBuzzName
+                    var _newLevel = CreateLevel(doc, _elevation, _FizzBuzzName);   // Call Create Level method and name it
+                    _elevation = _elevation + _floorHeight;                        // Increment the elevation
+
+                    if (globalFizzBuzzName == "FIZZBUZZ")
+                    { 
+                        var _newViewSheet = CreateViewSheet(doc, _FizzBuzzName);    // Create FIZZBUZZ_# Sheet Sheet
+
+                        //Bonus Part 1
+                        //creating a sheet, create a floor plan for each FIZZBUZZ.
+                        var _newFizzBuzzFloorViewPlan = CreateFizzBuzzFloorViewPlan(doc, _FizzBuzzName, _newLevel.Id);
+                        //Bonus Part 2
+                        //add the floor plan to the sheet by creating a Viewport element
+                        Viewport _newViewPort = addFloorPlanViewPortToSheet(doc, _newViewSheet, _newFizzBuzzFloorViewPlan);
+                    }
+                    else if (globalFizzBuzzName == "FIZZ")
                     {
-                    Level _newLevel = Level.Create(doc, _elevation); // create a levels
-                    levelsCount++
-                    string _levelName = GetTheFizzBuzzName(doc, i, _newLevel);       // Get the FizzBuzzName
-                    _newLevel.Name = _levelName;                     // Rename the level
-                    _elevation = _elevation + _floorHeight;          // Increment the elevation
+                        var _newFloorPlan = CreateFloorPlan(doc, _FizzBuzzName, _newLevel.Id);    // Call method to create new floorPlan
+                    }
+                    else if (globalFizzBuzzName == "BUZZ")
+                    {
+                        var _newCeilingPlan = CreateCeilingPlan(doc, _FizzBuzzName, _newLevel.Id);    // Call method to create new floorPlan
+                    }
                 }
                 tx.Commit();
             }
-            TaskDialog.Show("INFO",$"{levelsCount} Levels created/n{sheetCount} Sheets Created/nI'm still working on the project.");
+
+            TaskDialog.Show("INFO",$"{levelsCount} Levels created\n" +
+                                   $"{sheetCount} Sheets Created\n" +
+                                   $"{floorPlanCount} Floor Plan(s) Created\n" +
+                                   $"{ceilingPlanCount} Ceiling Plan(s) Created\n" +
+                                   $"{FizzBuzzViewPortCounter} ViewPort(s) Created");
+
             return Result.Succeeded;
         }
 
-        private string GetTheFizzBuzzName(Autodesk.Revit.DB.Document doc, double _floorHeight, Level level)
+        private Viewport addFloorPlanViewPortToSheet(Autodesk.Revit.DB.Document doc, Element _viewSheetElem, Element _floorPlanElem)
         {
-            string FizzBuzzName;
-            if (_floorHeight % 3 == 0 && _floorHeight % 5 == 0)
-            {
-                FizzBuzzName = $"BUZZBUZZ_{_floorHeight}";
-                CreateViewSheet(doc, FizzBuzzName);
-            }
-            else if (_floorHeight % 3 == 0)
-            {
-                FizzBuzzName = $"FIZZ_{_floorHeight}";
-                // CreateCeilingPlan();                    // NOT DONE, NEED TO IMPLEMENT
-            }
-            else if (_floorHeight % 5 == 0)
-            {
-                FizzBuzzName = $"BUZZ{_floorHeight}";
-               // CreateFloorPlan(doc, FizzBuzzName);  // NOT DONE, NEED TO IMPLEMENT
-            }
-            else
-                FizzBuzzName = $"{_floorHeight} % (3 or 5) != 0";
-            return FizzBuzzName;
+            XYZ insertPoint = new XYZ(2, 1, 0);
+            Viewport _newViewPort = Viewport.Create(doc, _viewSheetElem.Id, _floorPlanElem.Id, insertPoint);
+            FizzBuzzViewPortCounter++;
+            return _newViewPort;
         }
 
-        private void CreateViewSheet(Autodesk.Revit.DB.Document doc, string fizzBuzzName)
+        private ViewPlan CreateFizzBuzzFloorViewPlan(Autodesk.Revit.DB.Document doc, string fizzBuzzName, ElementId levelId)
+        {
+            // Get view family types
+            FilteredElementCollector vftCollector = new FilteredElementCollector(doc);
+            vftCollector.OfClass(typeof(ViewFamilyType));
+
+            ViewFamilyType floorPlanVFT = null;
+            foreach (ViewFamilyType curViewFamType in vftCollector)
+            {
+                if (curViewFamType.ViewFamily == ViewFamily.FloorPlan)
+                {
+                    floorPlanVFT = curViewFamType;
+                }
+            }
+            var newFloorPlan = ViewPlan.Create(doc, floorPlanVFT.Id, levelId);          // Create Floor Plan
+            newFloorPlan.Name = fizzBuzzName;
+            //floorPlanCount++;
+            return newFloorPlan;
+        }
+
+        private void ResetGlobalVariables()
+        {
+            levelsCount = 0;
+            sheetCount = 0;
+            globalFizzBuzzName = "";
+            floorPlanCount = 0;
+            ceilingPlanCount = 0;
+            FizzBuzzViewPortCounter = 0;
+        }
+        private string GetTheFizzBuzzName(int num)
+        {
+            string returnFizzBuzzName;
+            if (num % 3 == 0 && num % 5 == 0)
+            {
+                returnFizzBuzzName = $"FIZZBUZZ_{num}";
+                globalFizzBuzzName = "FIZZBUZZ";
+                //CreateViewSheet(doc, FizzBuzzName);
+            }
+            else if (num % 3 == 0)
+            {
+                returnFizzBuzzName = $"FIZZ_{num}";
+                globalFizzBuzzName = "FIZZ";
+                //CreateCeilingPlan(doc, FizzBuzzName);                    // NOT DONE, NEED TO IMPLEMENT
+            }
+            else if (num % 5 == 0)
+            {
+                returnFizzBuzzName = $"BUZZ_{num}";
+                globalFizzBuzzName = "BUZZ";
+            }
+            else
+            {
+                returnFizzBuzzName = $"{num} % (3 or 5) != 0";
+                globalFizzBuzzName = "";
+            }
+
+            return returnFizzBuzzName;
+        }
+        private ViewSheet CreateViewSheet(Autodesk.Revit.DB.Document doc, string fizzBuzzName)
         {
             // Get an available title block from document
-            FilteredElementCollector collector = new FilteredElementCollector(doc);
-            collector.OfClass(typeof(FamilySymbol));
-            collector.OfCategory(BuiltInCategory.OST_TitleBlocks);
+            FilteredElementCollector titleBlockCatCollector = new FilteredElementCollector(doc);
+            titleBlockCatCollector.OfClass(typeof(FamilySymbol));
+            titleBlockCatCollector.OfCategory(BuiltInCategory.OST_TitleBlocks);
 
-            ViewSheet _newViewSheet = ViewSheet.Create(doc, collector.FirstElement().Id);
+            ViewSheet _newViewSheet = ViewSheet.Create(doc, titleBlockCatCollector.FirstElementId());
             _newViewSheet.Name = fizzBuzzName;
             sheetCount++;
+            return _newViewSheet;
+        }
+        private Level CreateLevel(Autodesk.Revit.DB.Document doc, double _elevation, string _levelName)
+        {
+            Level _newLevel = Level.Create(doc, _elevation);             // create a levels
+            _newLevel.Name = _levelName;                                // Rename the level
+            Debug.Print($"Level Created. ID:{_newLevel.Id}  Name:{_newLevel.Name}");
+            levelsCount++;
+            return _newLevel;
+        }
+        private object CreateFloorPlan(Autodesk.Revit.DB.Document doc, string fizzBuzzName, ElementId levelId)
+        {
+            // Get view family types
+            FilteredElementCollector vftCollector = new FilteredElementCollector(doc);
+            vftCollector.OfClass(typeof(ViewFamilyType));
+
+            ViewFamilyType floorPlanVFT = null;
+            foreach (ViewFamilyType curViewFamType in vftCollector)
+            {
+                if (curViewFamType.ViewFamily == ViewFamily.FloorPlan)
+                {
+                    floorPlanVFT = curViewFamType;
+                }
+            }
+            var newFloorPlan = ViewPlan.Create(doc, floorPlanVFT.Id, levelId);          // Create Floor Plan
+            newFloorPlan.Name = fizzBuzzName;
+            floorPlanCount++;
+            return floorPlanVFT;
+
+        }
+        private object CreateCeilingPlan(Autodesk.Revit.DB.Document doc, string fizzBuzzName, ElementId levelId)
+        {
+            // Get view family types
+            FilteredElementCollector vftCollector = new FilteredElementCollector(doc);
+            vftCollector.OfClass(typeof(ViewFamilyType));
+
+            ViewFamilyType ceilingPlanVFT = null;
+            foreach (ViewFamilyType curViewFamType in vftCollector)
+            {
+                if (curViewFamType.ViewFamily == ViewFamily.CeilingPlan)
+                {
+                    ceilingPlanVFT = curViewFamType;
+                }
+            }
+            var newFloorPlan = ViewPlan.Create(doc, ceilingPlanVFT.Id, levelId);          // Create Ceiling Plan
+            newFloorPlan.Name = fizzBuzzName;
+            ceilingPlanCount++;
+            return ceilingPlanVFT;
         }
     }
 }
