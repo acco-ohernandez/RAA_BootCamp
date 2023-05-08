@@ -33,7 +33,7 @@ namespace RAA_BootCamp
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Autodesk.Revit.ApplicationServices.Application app = uiapp.Application;
             Autodesk.Revit.DB.Document doc = uidoc.Document;
-         
+
             //Variable Declarations
             int _number = 250;
             double _elevation = 0;
@@ -53,7 +53,7 @@ namespace RAA_BootCamp
                     _elevation = _elevation + _floorHeight;                        // Increment the elevation
 
                     if (globalFizzBuzzName == "FIZZBUZZ")
-                    { 
+                    {
                         var _newViewSheet = CreateViewSheet(doc, _FizzBuzzName);    // Create FIZZBUZZ_# Sheet Sheet
 
                         //Bonus Part 1
@@ -75,7 +75,7 @@ namespace RAA_BootCamp
                 tx.Commit();
             }
 
-            TaskDialog.Show("INFO",$"{levelsCount} Levels created\n" +
+            TaskDialog.Show("INFO", $"{levelsCount} Levels created\n" +
                                    $"{sheetCount} FIZZBUZZ Sheets Created\n" +
                                    $"{floorPlanCount} FIZZ Floor Plan(s) Created\n" +
                                    $"{ceilingPlanCount} BUZZ Ceiling Plan(s) Created\n" +

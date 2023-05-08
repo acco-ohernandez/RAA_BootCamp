@@ -1,11 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RevitAddIns>
   <AddIn Type="Command">
-    <Text>Module 01 Challenge</Text>
-    <Description>Some description for RAA_BootCamp</Description>
+    <Text>Orlando - Module 01 Challenge</Text>
+    <Description>FIZZFUZZ Challenge</Description>
     <Assembly>RAA_BootCamp.dll</Assembly>
     <FullClassName>RAA_BootCamp.Module01Challenge</FullClassName>
     <ClientId>cd7f290a-9508-4e71-810b-77a5b27331fb</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>Orlando - Module 02 Challenge</Text>
+    <Description>Hidden Message Challenge</Description>
+    <Assembly>RAA_BootCamp.dll</Assembly>
+    <FullClassName>RAA_BootCamp.ComModule02Challengemand</FullClassName>
+    <ClientId>6A3FD951-971C-4168-9EAE-78A1D4BF754C</ClientId>
     <VendorId>com.typepad.thebuildingcoder</VendorId>
     <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
   </AddIn>
