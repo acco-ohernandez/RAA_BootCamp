@@ -13,11 +13,21 @@
     <Text>Orlando - Module 02 Challenge</Text>
     <Description>Hidden Message Challenge</Description>
     <Assembly>RAA_BootCamp.dll</Assembly>
-    <FullClassName>RAA_BootCamp.ComModule02Challengemand</FullClassName>
+    <FullClassName>RAA_BootCamp.Module02Challenge</FullClassName>
     <ClientId>6A3FD951-971C-4168-9EAE-78A1D4BF754C</ClientId>
     <VendorId>com.typepad.thebuildingcoder</VendorId>
     <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
   </AddIn>
+  <AddIn Type="Command">
+    <Text>Orlando - Module 03 Challenge</Text>
+    <Description>Hidden Message Challenge</Description>
+    <Assembly>RAA_BootCamp.dll</Assembly>
+    <FullClassName>RAA_BootCamp.Module03Challenge</FullClassName>
+    <ClientId>F69DF60B-EE29-44B2-90ED-600599B7174B</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  
   <AddIn Type="Application">
     <Name>Application RAA_BootCamp</Name>
     <Assembly>RAA_BootCamp.dll</Assembly>
