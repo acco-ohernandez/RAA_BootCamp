@@ -400,8 +400,7 @@ namespace RAA_BootCamp.Common
             }
         }
 
-
-        public static void InsertFurnitureInRooms_Method2(List<SpatialElement> roomList, List<FurnitureSet> furnitureSetsList, List<FurnitureData> furnitureDataList, Document doc, ref int counter)
+        public static void InsertFurnitureInRooms_Method1(List<SpatialElement> roomList, List<FurnitureSet> furnitureSetsList, List<FurnitureData> furnitureDataList, Document doc, ref int counter)
         {
             foreach (SpatialElement room in roomList)
             {
@@ -425,6 +424,82 @@ namespace RAA_BootCamp.Common
                     }
 
                     Utils.SetParamValueAsInt(room, "Furniture Count", furnSet.FurnitureCount()); // Set the "Furniture Count" parameter value for the current room
+                }
+            }
+        }
+        public static void InsertFurnitureInRooms_Method2(List<SpatialElement> roomList, List<FurnitureSet> furnitureSetsList, List<FurnitureData> furnitureDataList, Document doc, ref int counter)
+        {
+            foreach (SpatialElement room in roomList)
+            {
+                LocationPoint roomPoint = room.Location as LocationPoint;
+                XYZ insertionPoint = roomPoint?.Point; // Get the insertion point of the room
+
+                string curRoomFurnSet = Utils.GetParamValue_Method2(room, "Furniture Set"); // Get the value of the "Furniture Set" parameter for the current room
+                var matchedFurnitureSets = furnitureSetsList.Where(f => f.Furniture_Set == curRoomFurnSet); // Filter the furniture sets that match the current room's furniture set
+
+                foreach (FurnitureSet furnSet in matchedFurnitureSets)
+                {
+                    var matchingFurnitureData = furnSet.IncludedFurniture
+                        .Join(furnitureDataList, curFurn => curFurn, furnitureData => furnitureData.FurnitureName, (curFurn, furnitureData) => furnitureData) // Match the included furniture in the furniture set with the furniture data list based on their names
+                        .ToList();
+
+                    foreach (FurnitureData furnData in matchingFurnitureData)
+                    {
+
+                        furnData.familySymbol.Activate(); // Activate the family symbol
+                        //FamilyInstance newFamilyInstance = doc.Create.NewFamilyInstance(insertionPoint, furnData.familySymbol, Autodesk.Revit.DB.Structure.StructuralType.NonStructural); // Create a new family instance in the room using the family symbol
+
+                        // Increase the X and Y coordinates by 5 inches
+                        XYZ updatedInsertionPoint = new XYZ(insertionPoint.X + 5, insertionPoint.Y + 5, insertionPoint.Z);
+                        FamilyInstance newFamilyInstance = doc.Create.NewFamilyInstance(updatedInsertionPoint, furnData.familySymbol, Autodesk.Revit.DB.Structure.StructuralType.NonStructural); // Create a new family instance in the room using the family symbol
+
+                        counter++; // Increment the counter for the inserted families
+                    }
+
+                    Utils.SetParamValueAsInt(room, "Furniture Count", furnSet.FurnitureCount()); // Set the "Furniture Count" parameter value for the current room
+                }
+            }
+        }
+
+        public static void InsertFurnitureInRooms_Method3(List<SpatialElement> roomList, List<FurnitureSet> furnitureSetsList, List<FurnitureData> furnitureDataList, Document doc, ref int counter)
+        {
+            foreach (SpatialElement room in roomList)
+            {
+                LocationPoint roomPoint = room.Location as LocationPoint;
+                XYZ insertionPoint = roomPoint?.Point; // Get the insertion point of the room
+
+                if (insertionPoint != null)
+                {
+                    double angle = 0.0; // Starting angle for element placement
+                    double angleIncrement = Math.PI / 6; // Angle increment (30 degrees) for each element placement
+
+                    string curRoomFurnSet = Utils.GetParamValue_Method2(room, "Furniture Set"); // Get the value of the "Furniture Set" parameter for the current room
+                    var matchedFurnitureSets = furnitureSetsList.Where(f => f.Furniture_Set == curRoomFurnSet); // Filter the furniture sets that match the current room's furniture set
+
+                    foreach (FurnitureSet furnSet in matchedFurnitureSets)
+                    {
+                        var matchingFurnitureData = furnSet.IncludedFurniture
+                            .Join(furnitureDataList, curFurn => curFurn, furnitureData => furnitureData.FurnitureName, (curFurn, furnitureData) => furnitureData) // Match the included furniture in the furniture set with the furniture data list based on their names
+                            .ToList();
+
+                        foreach (FurnitureData furnData in matchingFurnitureData)
+                        {
+                            furnData.familySymbol.Activate(); // Activate the family symbol
+
+                            // Calculate the placement coordinates based on the angle and distance from the insertion point
+                            double distance = 3.0; // Distance from the insertion point
+                            double x = insertionPoint.X + distance * Math.Cos(angle);
+                            double y = insertionPoint.Y + distance * Math.Sin(angle);
+                            XYZ placementPoint = new XYZ(x, y, insertionPoint.Z);
+
+                            FamilyInstance newFamilyInstance = doc.Create.NewFamilyInstance(placementPoint, furnData.familySymbol, Autodesk.Revit.DB.Structure.StructuralType.NonStructural); // Create a new family instance at the placement point
+                            counter++; // Increment the counter for the inserted families
+
+                            angle += angleIncrement; // Increment the angle for the next element placement
+                        }
+
+                        Utils.SetParamValueAsInt(room, "Furniture Count", furnSet.FurnitureCount()); // Set the "Furniture Count" parameter value for the current room
+                    }
                 }
             }
         }

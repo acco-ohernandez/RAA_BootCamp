@@ -48,11 +48,16 @@ namespace RAA_BootCamp
             using (Transaction t = new Transaction(doc, "Inserted Furniture"))
             {
                 t.Start();
+
                 // Method 1
                 //Utils.InsertFurnitureInRooms_Method1(roomList, furnitureSetsList, furnitureDataList, doc, ref counter);
 
                 // Method 2
-                Utils.InsertFurnitureInRooms_Method2(roomList, furnitureSetsList, furnitureDataList, doc, ref counter);
+                //Utils.InsertFurnitureInRooms_Method2(roomList, furnitureSetsList, furnitureDataList, doc, ref counter);
+
+                // Method 3
+                Utils.InsertFurnitureInRooms_Method3(roomList, furnitureSetsList, furnitureDataList, doc, ref counter);
+
                 t.Commit();
             }
 
