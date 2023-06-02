@@ -16,7 +16,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace RAA_BootCamp.Common
 {
-    public static class Utils
+    public static class MyUtils
     {
         // Declare a static variable to store the last selected directory
         private static string lastSelectedDirectory = "C:\\";
@@ -57,7 +57,7 @@ namespace RAA_BootCamp.Common
         /// <returns>List<List<string>></returns>
         public static List<List<string>> UM_ImportExcelFileUsingExcelInterop()
         {
-            string filePath = Utils.UM_GetExcelFilePath();  // Prompt the user to select an Excel file using the custom method UM_GetExcelFilePath()
+            string filePath = MyUtils.UM_GetExcelFilePath();  // Prompt the user to select an Excel file using the custom method UM_GetExcelFilePath()
 
             if (filePath == null)  // Check if no file was selected
             {
@@ -100,7 +100,7 @@ namespace RAA_BootCamp.Common
         /// <returns>List<List<string>></returns>
         public static List<List<string>> UM_ImportExcelFileUsingEPPlus(int sheetNumber)
         {
-            string filePath = Utils.UM_GetExcelFilePath();  // Prompt the user to select an Excel file using the custom method UM_GetExcelFilePath()
+            string filePath = MyUtils.UM_GetExcelFilePath();  // Prompt the user to select an Excel file using the custom method UM_GetExcelFilePath()
 
             if (filePath == null)  // Check if no file was selected
             {
@@ -143,7 +143,7 @@ namespace RAA_BootCamp.Common
 
         public static List<List<string>> UM_ImportExcelFileUsingEPPlusBySheetName(string sheetName)
         {
-            string filePath = Utils.UM_GetExcelFilePath();  // Prompt the user to select an Excel file using the custom method UM_GetExcelFilePath()
+            string filePath = MyUtils.UM_GetExcelFilePath();  // Prompt the user to select an Excel file using the custom method UM_GetExcelFilePath()
 
             if (filePath == null)  // Check if no file was selected
             {
@@ -194,7 +194,7 @@ namespace RAA_BootCamp.Common
 
         public static Dictionary<string, List<List<string>>> UM_ImportExcelFileUsingEPPlus_GetAllSheetsAndDataAsDictionary()
         {
-            string filePath = Utils.UM_GetExcelFilePath();  // Prompt the user to select an Excel file using the custom method UM_GetExcelFilePath()
+            string filePath = MyUtils.UM_GetExcelFilePath();  // Prompt the user to select an Excel file using the custom method UM_GetExcelFilePath()
 
             if (filePath == null)  // Check if no file was selected
             {
@@ -407,7 +407,7 @@ namespace RAA_BootCamp.Common
                 LocationPoint roomPoint = room.Location as LocationPoint;
                 XYZ insertionPoint = roomPoint?.Point; // Get the insertion point of the room
 
-                string curRoomFurnSet = Utils.GetParamValue_Method2(room, "Furniture Set"); // Get the value of the "Furniture Set" parameter for the current room
+                string curRoomFurnSet = MyUtils.GetParamValue_Method2(room, "Furniture Set"); // Get the value of the "Furniture Set" parameter for the current room
                 var matchedFurnitureSets = furnitureSetsList.Where(f => f.Furniture_Set == curRoomFurnSet); // Filter the furniture sets that match the current room's furniture set
 
                 foreach (FurnitureSet furnSet in matchedFurnitureSets)
@@ -423,7 +423,7 @@ namespace RAA_BootCamp.Common
                         counter++; // Increment the counter for the inserted families
                     }
 
-                    Utils.SetParamValueAsInt(room, "Furniture Count", furnSet.FurnitureCount()); // Set the "Furniture Count" parameter value for the current room
+                    MyUtils.SetParamValueAsInt(room, "Furniture Count", furnSet.FurnitureCount()); // Set the "Furniture Count" parameter value for the current room
                 }
             }
         }
@@ -434,7 +434,7 @@ namespace RAA_BootCamp.Common
                 LocationPoint roomPoint = room.Location as LocationPoint;
                 XYZ insertionPoint = roomPoint?.Point; // Get the insertion point of the room
 
-                string curRoomFurnSet = Utils.GetParamValue_Method2(room, "Furniture Set"); // Get the value of the "Furniture Set" parameter for the current room
+                string curRoomFurnSet = MyUtils.GetParamValue_Method2(room, "Furniture Set"); // Get the value of the "Furniture Set" parameter for the current room
                 var matchedFurnitureSets = furnitureSetsList.Where(f => f.Furniture_Set == curRoomFurnSet); // Filter the furniture sets that match the current room's furniture set
 
                 foreach (FurnitureSet furnSet in matchedFurnitureSets)
@@ -456,7 +456,7 @@ namespace RAA_BootCamp.Common
                         counter++; // Increment the counter for the inserted families
                     }
 
-                    Utils.SetParamValueAsInt(room, "Furniture Count", furnSet.FurnitureCount()); // Set the "Furniture Count" parameter value for the current room
+                    MyUtils.SetParamValueAsInt(room, "Furniture Count", furnSet.FurnitureCount()); // Set the "Furniture Count" parameter value for the current room
                 }
             }
         }
@@ -473,7 +473,7 @@ namespace RAA_BootCamp.Common
                     double angle = 0.0; // Starting angle for element placement
                     double angleIncrement = Math.PI / 6; // Angle increment (30 degrees) for each element placement
 
-                    string curRoomFurnSet = Utils.GetParamValue_Method2(room, "Furniture Set"); // Get the value of the "Furniture Set" parameter for the current room
+                    string curRoomFurnSet = MyUtils.GetParamValue_Method2(room, "Furniture Set"); // Get the value of the "Furniture Set" parameter for the current room
                     var matchedFurnitureSets = furnitureSetsList.Where(f => f.Furniture_Set == curRoomFurnSet); // Filter the furniture sets that match the current room's furniture set
 
                     foreach (FurnitureSet furnSet in matchedFurnitureSets)
@@ -498,7 +498,7 @@ namespace RAA_BootCamp.Common
                             angle += angleIncrement; // Increment the angle for the next element placement
                         }
 
-                        Utils.SetParamValueAsInt(room, "Furniture Count", furnSet.FurnitureCount()); // Set the "Furniture Count" parameter value for the current room
+                        MyUtils.SetParamValueAsInt(room, "Furniture Count", furnSet.FurnitureCount()); // Set the "Furniture Count" parameter value for the current room
                     }
                 }
             }

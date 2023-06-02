@@ -35,15 +35,15 @@ namespace RAA_BootCamp
 
             TaskDialog.Show("Info", "\"Please importe the:\n RAB_Module 03_Furniture.xlsx\""); // Tell the user what to do next.
 
-            var _excelSheets = Utils.UM_ImportExcelFileUsingEPPlus_GetAllSheetsAndDataAsDictionary(); // Import the Excel file
-            var _furnitureSetsFromExcel = Utils.UM_GetsheetDataFromImportedExcelBySheetName(_excelSheets, "Furniture sets");  // Get "Furniture sets" sheet
-            var _furnitureTypesFromExcel = Utils.UM_GetsheetDataFromImportedExcelBySheetName(_excelSheets, "Furniture types"); // Get "Furniture types" sheet
+            var _excelSheets = MyUtils.UM_ImportExcelFileUsingEPPlus_GetAllSheetsAndDataAsDictionary(); // Import the Excel file
+            var _furnitureSetsFromExcel = MyUtils.UM_GetsheetDataFromImportedExcelBySheetName(_excelSheets, "Furniture sets");  // Get "Furniture sets" sheet
+            var _furnitureTypesFromExcel = MyUtils.UM_GetsheetDataFromImportedExcelBySheetName(_excelSheets, "Furniture types"); // Get "Furniture types" sheet
 
-            List<FurnitureSet> furnitureSetsList = Utils.MU_GetListOfFurnitureSets(_furnitureSetsFromExcel);    // List of FurnitureSet Types
-            List<FurnitureData> furnitureDataList = Utils.MU_GetListOfFurnitureTypes(doc, _furnitureTypesFromExcel);// List of FurnitureData Types
+            List<FurnitureSet> furnitureSetsList = MyUtils.MU_GetListOfFurnitureSets(_furnitureSetsFromExcel);    // List of FurnitureSet Types
+            List<FurnitureData> furnitureDataList = MyUtils.MU_GetListOfFurnitureTypes(doc, _furnitureTypesFromExcel);// List of FurnitureData Types
 
             int counter = 0;
-            List<SpatialElement> roomList = Utils.MU_GetAllRooms(doc); // Get a list of all the rooms
+            List<SpatialElement> roomList = MyUtils.MU_GetAllRooms(doc); // Get a list of all the rooms
 
             using (Transaction t = new Transaction(doc, "Inserted Furniture"))
             {
@@ -56,7 +56,7 @@ namespace RAA_BootCamp
                 //Utils.InsertFurnitureInRooms_Method2(roomList, furnitureSetsList, furnitureDataList, doc, ref counter);
 
                 // Method 3
-                Utils.InsertFurnitureInRooms_Method3(roomList, furnitureSetsList, furnitureDataList, doc, ref counter);
+                MyUtils.InsertFurnitureInRooms_Method3(roomList, furnitureSetsList, furnitureDataList, doc, ref counter);
 
                 t.Commit();
             }
